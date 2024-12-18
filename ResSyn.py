@@ -12,30 +12,28 @@ def resFolder(resPath,targetPath):
     #     for file_name in files:
     #         resfile_list.append(os.path.join(root, file_name))
     # print(f"原目录下文件：{resfile_list}")
-    # 获取当前脚本文件的完整路径
-    # script_path = os.path.abspath(__file__)
-    
-    # # 获取当前脚本文件所在的目录
-    # script_dir = os.path.join(os.path.dirname(script_path),"hash3.json")
-    # print
-    resfile_list = hash3.process_directory(resPath,"E:\\art_tool\\SynRes\\hashes3.json")
+
+    # 获取脚本所在的目录路径
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    # 存放json文件的路径
+    new_file_path = os.path.join(script_directory, "hashes3.json")
+    new_file_path = new_file_path.replace('\\', '\\\\')
+    resfile_list = hash3.process_directory(resPath,new_file_path)
+
+    # resfile_list = hash3.process_directory(resPath,"E:\\art_tool\\ResSynTool\\hashes3.json")
 
 
     print(f"有修改或新增的文件：{resfile_list}")
-    # print(hash1.process_directory(resPath,"E:\\art_tool\\SynRes\\hashes1.json"))
 
     if len(resfile_list) > 0:
         for file in resfile_list:
             print(file)
             split_list = file.split(res_path)
             file_name = split_list[1]
-            # print(file_name)
             target_file = target_path+file_name
-            # if os.path.exists(target_file):
-            #     print(f"文件 {target_file} 存在，无法重复提交。")
-            #     continue
             files_to_add.append(target_file)
-            print(f"准备要提交的文件：{files_to_add}")
+            # print(f"准备要提交的文件：{files_to_add}")
+        print(f"准备要提交的文件：{files_to_add}")
     else:
         print("没有需要提交的文件")
     
