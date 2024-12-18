@@ -1,7 +1,7 @@
 import os
 import shutil
 import subprocess
-import hash1
+# import hash1
 import hash3
 
 def resFolder(resPath,targetPath):
@@ -17,7 +17,7 @@ def resFolder(resPath,targetPath):
     
     # # 获取当前脚本文件所在的目录
     # script_dir = os.path.join(os.path.dirname(script_path),"hash3.json")
-
+    # print
     resfile_list = hash3.process_directory(resPath,"E:\\art_tool\\SynRes\\hashes3.json")
 
 
