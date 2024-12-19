@@ -94,8 +94,3 @@ def process_directory(directory, json_file_path):
     hashes.update(updated_hashes)
     save_hashes_to_json(json_file_path, hashes)
     return commit_file
-
-# if __name__ == "__main__":
-#     directory_to_process = r"C:\Users\欧晓锋\Desktop\res"  # Replace with your directory path
-#     hash_json_file = r"C:\Users\欧晓锋\Desktop\hash\hashes.json"  # Path to the JSON file that stores hashes
-#     process_directory(directory_to_process, hash_json_file)
