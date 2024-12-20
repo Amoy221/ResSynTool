@@ -3,6 +3,7 @@ import subprocess
 import time
 import texthelper
 from datetime import datetime
+import CommitMessage
 
 def is_abCommandToolsInstalled():
     cmd = f'ab'
@@ -94,7 +95,7 @@ def GetLatestABRes(abpath):
         print("更新成功")
         return True
     else:
-        print('更新失败')
+        print(f'{abpath}:更新失败')
         # logger.error(f"[{path}]更新失败! 错误信息:" + output[-1].replace('\n', ''))
         if "Error message from the server: ''" in output[-1]:
             # logger.error(f"[{path}]错误信息为服务器错误,重试中")
@@ -103,17 +104,17 @@ def GetLatestABRes(abpath):
             return False
 
 
-def history(path):
+def gethistory(path):
     cmd = f'ab history -format "user:#Changed By#|commitmessage:#CheckInComment#|time:#Changed At#|created time:#Created At#|" "{path}"'
     result = subprocess.getoutput(cmd)
-    print(f"result:{result}")
+    # print(f"result:{result}")
     data = [line for line in subprocess.getoutput(cmd).splitlines() if line != '|' and 'user' in line]
-    print(f"data:{data}")
+    # print(f"data:{data}")
     if len(data) >= 1:
         index = 0
         while index<len(data):
             result = data[index]
-            print(result)
+            # print(result)
             user = texthelper.get_middle_text(result,'user:', '|')
             # if len(data) == 1 and user in whitelist:
             #     return None,None,None
@@ -126,27 +127,53 @@ def history(path):
             commitmessage = texthelper.get_middle_text(result,'commitmessage:', '|')
             timestamp = texthelper.get_middle_text(result,'time:', '|')
             createdtime = result.split("created time:")[1].split('|')[0].strip()
-            print(f"createdtime:{createdtime}")
+            # print(f"createdtime:{createdtime}")
             if timestamp == '':
                 # 解析时间字符串为 datetime 对象
                 parsed_time = datetime.strptime(createdtime, "%a %b %d %H:%M:%S %Y")
                 # 格式化为指定的时间格式
                 changedtime = parsed_time.strftime("%Y-%m-%d %H:%M:%S")
-                print(f"changedtime:{changedtime}")
+                # print(f"changedtime:{changedtime}")
             else:
                 changedtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(timestamp)))
-                print(f"changedtime2:{changedtime}")
+                # print(f"changedtime2:{changedtime}")
             print(f'[{path}]提交信息为[{user}|{commitmessage}|{changedtime}]')
-            return user,commitmessage,changedtime
+            return path,user,commitmessage,changedtime
         else:
             return False
 
+abfile_list = []
+def Getlocalrespath(path):
+    """获取下载到本地的资源文件路径"""
+    for root, dirs, files in os.walk(path):
+        for dir_name in dirs:
+            dir_path = os.path.join(root, dir_name)
+            # 去除.get_date.dat文件
+            if ".get_date.dat" in dir_path: 
+                continue
+            # 文件路径分割，去除了”Z:\TT Game“
+            dir_path = dir_path.split(path)[1]
+            abfile_list.append(dir_path)
+        for file_name in files:
+            file_path = os.path.join(root, file_name)
+            if ".get_date.dat" in file_path:
+                continue
+            file_path = file_path.split(path)[1]
+            abfile_list.append(file_path)
+    print(f"ab下载到本地目录的文件数量：{len(abfile_list)}") 
+    return abfile_list
+
+# commitmessagelist = []
 if __name__ == '__main__':
     if is_abCommandToolsInstalled():
         if logon("王爽","ws265231","TT Game","pig"):
-            # Getlogoninfo()
-            # GetLatestABRes(r"07Plot\Gacha")
-            history(r"01Character\03Boss\01max\boss401\Anim")
+            Getlogoninfo()
+            GetLatestABRes(r"07Plot\Gacha")
+            file_list = Getlocalrespath(r'Z:\TT Game')
+            for abfilepath in file_list:
+                path,user,commitmessage,changedtime = gethistory(abfilepath)
+                CommitMessage.abfilejson(path,user,commitmessage,changedtime)
+
 
 
 
