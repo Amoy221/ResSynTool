@@ -4,6 +4,8 @@ import time
 import texthelper
 from datetime import datetime
 import CommitMessage
+import json
+import ABCheck
 
 def is_abCommandToolsInstalled():
     cmd = f'ab'
@@ -92,7 +94,7 @@ def GetLatestABRes(abpath):
     # 判断最后一行输出是否包含'successfully'
     if f'successfully' in output[-1]:
         # logger.info(f"更新成功[{path}]")
-        print("更新成功")
+        print("更新成功------------------------")
         return True
     else:
         print(f'{abpath}:更新失败')
@@ -163,16 +165,42 @@ def Getlocalrespath(path):
     print(f"ab下载到本地目录的文件数量：{len(abfile_list)}") 
     return abfile_list
 
+def ABfilepath(path):
+    print("正在检索AB库所有文件....")
+    # ab enumobjects -format "Name of Object:#Name#,Local-Path=#LocalPath#" -recursive "Z:\TT Game\07Plot\Gacha"
+    # cmd = ['ab','enumobjects','-format', '"Name of Object:#Name#,Local-Path=#LocalPath#"', '-recursive', path]
+    cmd = f'ab enumobjects -format "Name of Object:#Name#,Local-Path=#LocalPath#" -recursive "{path}"'
+    result = subprocess.getoutput(cmd)
+    # print(type(result))
+    local_paths = []
+    lines = result.split('\n')
+    for line in lines:
+        if 'Local-Path=' in line:
+            parts = line.split('Local-Path=')
+            local_path = parts[1].strip()
+            local_path = local_path.split(r'Z:\TT Game')[1]
+            print(local_path)
+            local_paths.append(local_path)
+    # print(local_paths)
+    return local_paths
+
+
+
 # commitmessagelist = []
 if __name__ == '__main__':
     if is_abCommandToolsInstalled():
         if logon("王爽","ws265231","TT Game","pig"):
             Getlogoninfo()
-            GetLatestABRes(r"07Plot\Gacha")
-            file_list = Getlocalrespath(r'Z:\TT Game')
-            for abfilepath in file_list:
-                path,user,commitmessage,changedtime = gethistory(abfilepath)
-                CommitMessage.abfilejson(path,user,commitmessage,changedtime)
+            # GetLatestABRes(r"07Plot\Gacha")
+            # file_list = Getlocalrespath(r'Z:\TT Game') # 可以不用了
+            # for abfilepath in file_list:
+            #     path,user,commitmessage,changedtime = gethistory(abfilepath)
+            #     CommitMessage.abfilejson(path,user,commitmessage,changedtime)
+            abfilelist = ABfilepath(r"07Plot\Gacha") # 获取ab库下所有文件的路径
+            # for filepath in abfilelist:
+            #     path,user,commitmessage,changedtime = gethistory(filepath) # 获取每个文件的提交信息
+            ABCheck.ABCommitedInfo(abfilelist,'commitinfo.json')
+            
 
 
 
