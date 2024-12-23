@@ -187,20 +187,23 @@ def ABfilepath(path):
 
 
 # commitmessagelist = []
-if __name__ == '__main__':
-    if is_abCommandToolsInstalled():
-        if logon("王爽","ws265231","TT Game","pig"):
-            Getlogoninfo()
-            # GetLatestABRes(r"07Plot\Gacha")
-            # file_list = Getlocalrespath(r'Z:\TT Game') # 可以不用了
-            # for abfilepath in file_list:
-            #     path,user,commitmessage,changedtime = gethistory(abfilepath)
-            #     CommitMessage.abfilejson(path,user,commitmessage,changedtime)
-            abfilelist = ABfilepath(r"07Plot\Gacha") # 获取ab库下所有文件的路径
-            # for filepath in abfilelist:
-            #     path,user,commitmessage,changedtime = gethistory(filepath) # 获取每个文件的提交信息
-            ABCheck.ABCommitedInfo(abfilelist,'commitinfo.json')
-            
+
+
+# if __name__ == '__main__':
+#     if is_abCommandToolsInstalled():
+#         if logon("王爽","ws265231","TT Game","pig"):
+#             Getlogoninfo()
+#             # GetLatestABRes(r"07Plot\Gacha")
+#             # file_list = Getlocalrespath(r'Z:\TT Game') # 可以不用了
+#             # for abfilepath in file_list:
+#             #     path,user,commitmessage,changedtime = gethistory(abfilepath)
+#             #     CommitMessage.abfilejson(path,user,commitmessage,changedtime)
+#             abfilelist = ABfilepath(r"07Plot\Gacha") # 获取ab库下所有文件的路径
+#             # for filepath in abfilelist:
+#             #     path,user,commitmessage,changedtime = gethistory(filepath) # 获取每个文件的提交信息
+#             ABCheck.ABFileDownload(abfilelist,'commitinfo.json')
+
+
 
 
 

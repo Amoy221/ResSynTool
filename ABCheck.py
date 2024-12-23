@@ -3,7 +3,7 @@ import ABRes
 import os
 
 
-def ABCommitedInfo(abfilelist,jsonpath):
+def ABFileDownload(abfilelist,jsonpath):
     try:
         default_data = {}
         # 尝试读取现有的 JSON 文件

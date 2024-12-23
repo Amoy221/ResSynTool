@@ -1,36 +1,36 @@
 import os
 import shutil
 import subprocess
-# import hash1
 import hash3
 
-def resFolder(resPath,targetPath):
 
-    # for root, dirs, files in os.walk(resPath):
-    #     for dir_name in dirs:
-    #         resfile_list.append(os.path.join(root, dir_name))
-    #     for file_name in files:
-    #         resfile_list.append(os.path.join(root, file_name))
-    # print(f"原目录下文件：{resfile_list}")
+files_to_add = []
 
-    # 获取脚本所在的目录路径
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-    # 存放json文件的路径
-    new_file_path = os.path.join(script_directory, "hashes3.json")
-    new_file_path = new_file_path.replace('\\', '\\\\')
-    resfile_list = hash3.process_directory(resPath,new_file_path)
+def resFolder(res_Path,target_Path):
+    resfile_list = []
+    global files_to_add
+    for root, dirs, files in os.walk(res_Path):
+        for dir_name in dirs:
+            resfile_list.append(os.path.join(root, dir_name))
+        for file_name in files:
+            resfile_list.append(os.path.join(root, file_name))
+    print(f"原目录下文件：{resfile_list}")
 
-    # resfile_list = hash3.process_directory(resPath,"E:\\art_tool\\ResSynTool\\hashes3.json")
-
+    # # 获取脚本所在的目录路径
+    # script_directory = os.path.dirname(os.path.abspath(__file__))
+    # # 存放json文件的路径
+    # new_file_path = os.path.join(script_directory, "hashes3.json")
+    # new_file_path = new_file_path.replace('\\', '\\\\')
+    # resfile_list = hash3.process_directory(resPath,new_file_path)
 
     print(f"有修改或新增的文件：{resfile_list}")
 
     if len(resfile_list) > 0:
         for file in resfile_list:
             print(file)
-            split_list = file.split(res_path)
+            split_list = file.split(res_Path)
             file_name = split_list[1]
-            target_file = target_path+file_name
+            target_file = target_Path+file_name
             files_to_add.append(target_file)
             # print(f"准备要提交的文件：{files_to_add}")
         print(f"准备要提交的文件：{files_to_add}")
@@ -39,11 +39,11 @@ def resFolder(resPath,targetPath):
     
     if len(files_to_add) > 0:
         # 复制源目录下的所有内容到目标目录，忽略同名文件夹，同名文件内容不同则文件为修改状态
-        shutil.copytree(resPath, targetPath, dirs_exist_ok=True)
-
+        shutil.copytree(res_Path, target_Path, dirs_exist_ok=True)
+    return files_to_add
 
 def add_tsa(res_path,target_path):
-
+    global files_to_add
     print(f"要添加到工作区的文件：{files_to_add}")
     # 构造cm add命令
     command = ['cm', 'add'] + files_to_add
@@ -63,6 +63,7 @@ def add_tsa(res_path,target_path):
 
 
 def commit_Repository():
+    global files_to_add
     # 提交信息
     commit_message = "这是通过Python脚本提交的更改"
     for file in files_to_add:
@@ -87,15 +88,15 @@ def commit_Repository():
         print(e.stderr)
 
 
-if __name__ == '__main__':
-    res_path = "D:\\project_res"
-    target_path = "D:\\Projects"
-    resfile_list = []
-    files_to_add = []
-    resFolder(res_path,target_path)
-    if len(files_to_add) > 0:
-        add_tsa(res_path,target_path)
-        commit_Repository()
+# if __name__ == '__main__':
+#     res_path = "Z:\\TT Game"
+#     target_path = "D:\\Projects"
+#     # resfile_list = []
+#     files_to_add = []
+#     resFolder(res_path,target_path)
+#     if len(files_to_add) > 0:
+#         add_tsa(res_path,target_path)
+#         commit_Repository()
 
 
 
