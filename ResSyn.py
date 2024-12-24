@@ -84,10 +84,12 @@ def commit_Repository():
         # 如果命令成功执行，打印提交信息
         print("更改已成功提交到Plastic SCM存储库:")
         print(result.stdout) # 输出none
+        return True
     except subprocess.CalledProcessError as e:
         # 如果命令执行失败，打印错误信息
         print(f"提交更改时出错: {e}")
         print(e.stderr)
+        return False
 
 
 # if __name__ == '__main__':
