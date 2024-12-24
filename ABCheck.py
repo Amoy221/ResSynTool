@@ -17,13 +17,13 @@ def ABFileDownload(abfilelist,jsonpath):
             existing_entries = json.load(jsonfile)
         for filepath in abfilelist:
             path, user, commitmessage, changedtime = AB.gethistory(filepath) # 获取每个文件的历史信息
-            new_entry = {
-                path: {
-                    "commiter": user,
-                    "modifiedTime": changedtime,
-                    "commitmessage": commitmessage
-                }
-            }
+            # new_entry = {
+            #     path: {
+            #         "commiter": user,
+            #         "modifiedTime": changedtime,
+            #         "commitmessage": commitmessage
+            #     }
+            # }
             # print(f"path:{path},changedtime:{changedtime}")
             # 检查 path 是否在 existing_records 的键中
             if path in existing_entries.keys():
@@ -38,6 +38,13 @@ def ABFileDownload(abfilelist,jsonpath):
             is_updateJson = AB.GetLatestABRes(path) # 下载资源文件到本地
             # CommitMessage.abfilejson(path,user,commitmessage,changedtime)
             if is_updateJson:
+                new_entry = {
+                    path: {
+                        "commiter": user,
+                        "modifiedTime": changedtime,
+                        "commitmessage": commitmessage
+                    }
+                }
                 existing_entries.update(new_entry) # 更新下载的信息  
         # 将更新后的 JSON 结构写回到文件中
         with open(jsonpath, 'w', encoding='utf-8') as json_file:
