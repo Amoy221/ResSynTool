@@ -1,7 +1,7 @@
 import os
 import shutil
 import subprocess
-import hash3
+
 
 
 files_to_add = []
@@ -11,10 +11,12 @@ def resFolder(res_Path,target_Path):
     global files_to_add
     for root, dirs, files in os.walk(res_Path):
         for dir_name in dirs:
-            resfile_list.append(os.path.join(root, dir_name))
+            dir_path = os.path.join(root, dir_name)
+            resfile_list.append(dir_path)
         for file_name in files:
-            resfile_list.append(os.path.join(root, file_name))
-    print(f"原目录下文件：{resfile_list}")
+            file_path = os.path.join(root, file_name)
+            resfile_list.append(file_path)
+    print(f"ab下载到本地目录的文件数量：{len(resfile_list)},文件：{resfile_list}")
 
     # # 获取脚本所在的目录路径
     # script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +56,7 @@ def add_tsa(res_path,target_path):
         for file in files_to_add:
             print(file)
         # 如果需要，可以打印命令的输出
-        print(result.stdout)
+        print(result.stdout) # 输出none
     except subprocess.CalledProcessError as e:
         print(f"添加文件时出错: {e}")
         # 打印错误输出以帮助调试
@@ -81,7 +83,7 @@ def commit_Repository():
         
         # 如果命令成功执行，打印提交信息
         print("更改已成功提交到Plastic SCM存储库:")
-        print(result.stdout)
+        print(result.stdout) # 输出none
     except subprocess.CalledProcessError as e:
         # 如果命令执行失败，打印错误信息
         print(f"提交更改时出错: {e}")

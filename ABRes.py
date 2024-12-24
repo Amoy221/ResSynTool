@@ -80,9 +80,11 @@ def Getlogoninfo():
     print(result)
 
 def GetLatestABRes(abpath):
-    
+    '''
+    参数：'-nosmartget' 关闭智能获取功能.get_date.dat表
+    '''
     print(f'下载ab库文件到本地z盘中....')
-    cmd = ['ab', 'getlatest', abpath, '-overwritewritable', 'replace', '-overwritecheckedout', 'replace' ]
+    cmd = ['ab', 'getlatest', abpath, '-overwritewritable', 'replace', '-overwritecheckedout', 'replace','-nosmartget']
     result = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # print(result)
     output = []
