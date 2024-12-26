@@ -43,6 +43,7 @@ def delete_contents(directory_path):
         print(f"Failed to delete outermost directory {directory_path}: It may not be empty.")
 
 def deletePlasticfile(file_path):
+    """删除plastic文件"""
     if os.path.exists(file_path):
         # 取消文件的只读属性
         win32api.SetFileAttributes(file_path, win32con.FILE_ATTRIBUTE_NORMAL)

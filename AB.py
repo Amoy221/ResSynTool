@@ -158,32 +158,30 @@ def ABfilepath(path):
     cmd = f'ab enumobjects -format "Name of Object:#Name#,Local-Path=#LocalPath#" -recursive "{path}"'
     result = subprocess.getoutput(cmd)
     # print(type(result))
-    local_paths = []
+    local_paths = [] # 包括子目录和文件
+
+    file_paths = [] # 只存放文件
+    dirtory_paths = [] # 只存放子目录
+
     lines = result.split('\n')
     for line in lines:
         if 'Local-Path=' in line:
             parts = line.split('Local-Path=')
             local_path = parts[1].strip()
+
             local_path = local_path.split(r'Z:\TT Game')[1]
-            print(local_path)
+            # print(local_path)
             local_paths.append(local_path)
-    # print(local_paths)
-    return local_paths
+            
+            if '.' in local_path.split('\\')[-1]:
+                # print(f"{local_path}是文件。。")
+                file_paths.append(local_path)
+            else:
+                # print(f"{local_path}是文件夹。。")
+                dirtory_paths.append(local_path)
 
+    return local_paths,file_paths,dirtory_paths
 
-# if __name__ == '__main__':
-#     if is_abCommandToolsInstalled():
-#         if logon("王爽","ws265231","TT Game","pig"):
-#             Getlogoninfo()
-#             # GetLatestABRes(r"07Plot\Gacha")
-#             # file_list = Getlocalrespath(r'Z:\TT Game') # 可以不用了
-#             # for abfilepath in file_list:
-#             #     path,user,commitmessage,changedtime = gethistory(abfilepath)
-#             #     CommitMessage.abfilejson(path,user,commitmessage,changedtime)
-#             abfilelist = ABfilepath(r"07Plot\Gacha") # 获取ab库下所有文件的路径
-#             # for filepath in abfilelist:
-#             #     path,user,commitmessage,changedtime = gethistory(filepath) # 获取每个文件的提交信息
-#             ABCheck.ABFileDownload(abfilelist,'commitinfo.json')
 
 
 

@@ -27,7 +27,7 @@ def resFolder(res_Path,target_Path):
     # new_file_path = new_file_path.replace('\\', '\\\\')
     # resfile_list = hash3.process_directory(resPath,new_file_path)
 
-    print(f"有修改或新增的文件：{resfile_list}")
+    # print(f"有修改或新增的文件：{resfile_list}")
 
     if len(resfile_list) > 0:
         for file in resfile_list:
