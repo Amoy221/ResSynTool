@@ -1,6 +1,8 @@
 import os
 import shutil
 import subprocess
+import json
+import DeleteABfile
 
 
 
@@ -39,8 +41,11 @@ def resFolder(res_Path,target_Path):
     else:
         print("没有需要提交的文件")
     
+    
     if len(files_to_add) > 0:
-        
+        # for file in files_to_add:
+        #     if file in existing_entries.keys():
+        #         DeleteABfile.delete_contents(file)
         # 复制源目录下的所有内容到目标目录，忽略同名文件夹，同名文件内容不同则文件为修改状态
         shutil.copytree(res_Path, target_Path, dirs_exist_ok=True)
     return files_to_add

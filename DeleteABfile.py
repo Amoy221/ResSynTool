@@ -1,5 +1,6 @@
 import os
-
+import win32api
+import win32con
 
 def delete_contents(directory_path):
     """
@@ -40,3 +41,14 @@ def delete_contents(directory_path):
         # 如果目录不是空的（可能是因为权限问题或其他原因导致的文件删除失败），则忽略这个错误
         # 注意：在实际应用中，您可能想要更详细地处理这个错误
         print(f"Failed to delete outermost directory {directory_path}: It may not be empty.")
+
+def deletePlasticfile(file_path):
+    if os.path.exists(file_path):
+        # 取消文件的只读属性
+        win32api.SetFileAttributes(file_path, win32con.FILE_ATTRIBUTE_NORMAL)
+        
+        # 删除文件
+        os.remove(file_path)
+        print(f"文件 {file_path} 已成功删除。")
+    else:
+        print(f"文件 {file_path} 不存在。")

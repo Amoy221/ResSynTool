@@ -1,9 +1,11 @@
 import json
 import AB
 import os
+import DeleteABfile
+import test
 
 
-def ABFileDownload(abfilelist,jsonpath):
+def ABFileDownload(abfilelist,jsonpath,target_path,ab_path):
     try:
         default_data = {}
         # 尝试读取现有的 JSON 文件
@@ -33,6 +35,26 @@ def ABFileDownload(abfilelist,jsonpath):
                     continue
                 else:
                     print(f"Path: {path} 文件存在, 但 modifiedTime: {changedtime} 修改时间变化.")
+                    
+                    print(f"target_path:{target_path},path:{path}")
+                    # plasticfilepath = os.path.join(target_path,path) # 拼接plastic文件路径
+                    plasticfilepath = target_path + path
+                    print(plasticfilepath)
+                    plasticfilepath = plasticfilepath.replace('\\\\','\\')
+                    DeleteABfile.deletePlasticfile(plasticfilepath) # 删除plastic文件
+                    print("plastic工作区的同名文件已删除。。。。")
+                    existing_entries.pop(path)
+                    # 将更新后的字典写回到JSON文件
+                    with open(jsonpath, 'w', encoding='utf-8') as json_file:
+                        json.dump(existing_entries, json_file, ensure_ascii=False, indent=4) 
+                    print(f"缓存json文件{path}数据已移除。。。。")
+                    directories = test.get_deletefile_directories(plasticfilepath,ab_path)
+                    for directory in directories:
+                        directory = directory.split(target_path)[1] + "\\"
+                        print(directory)
+                        existing_entries[directory]['modifiedTime'] = changedtime
+                        print(f"文件{directory}时间已修改：{changedtime}")
+
             else:
                 print(f"Path: {path} 文件不存在，可以下载.")
             is_updateJson = AB.GetLatestABRes(path) # 下载资源文件到本地
@@ -50,14 +72,17 @@ def ABFileDownload(abfilelist,jsonpath):
         with open(jsonpath, 'w', encoding='utf-8') as json_file:
             json.dump(existing_entries, json_file, ensure_ascii=False, indent=4)
                 
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         # 如果文件不存在，就创建一个空列表
         existing_entries = {}
         print("111")
+        print(f"FileNotFoundError:{e}")
+        print(f"FileNotFoundError:{str(e)}")
+
     except json.JSONDecodeError:
         # 如果文件不是有效的 JSON，打印错误并跳过
         print("Error decoding JSON in output.json")
         existing_entries = {}
     
-#  def delete_abfile():
+
 
